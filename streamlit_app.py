@@ -31,6 +31,36 @@ def convert_input_to_df(input_data):
   df = pd.DataFrame(data, columns = ['Gender', 'Age', 'Height', 'Weight', 'family_history_with_overweight', 'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'])
   return df
 
+def encode_features(df):
+    df["Gender"] = genderEncoder.transform(df[["Gender"]])
+    df["family_history_with_overweight"] = familyHistoryEncoder.transform(df[["family_history_with_overweight"]])
+    df["FAVC"] = favcEncoder.transform(df[["FAVC"]])
+    df["CAEC"] = caecEncoder.transform(df[["CAEC"]])
+    df["SMOKE"] = smokeEncoder.transform(df[["SMOKE"]])
+    df["SCC"] = sccEncoder.transform(df[["SCC"]])
+    df["CALC"] = calcEncoder.transform(df[["CALC"]])
+
+    # One-hot encode MTRANS
+    encoded_array = mtransEncoder.transform(df[["MTRANS"]])
+    encoded_df = pd.DataFrame(encoded_array, columns=mtransEncoder.get_feature_names_out(["MTRANS"]))
+    df = pd.concat([df, encoded_df], axis=1)
+    df.drop(columns=["MTRANS"], inplace=True)
+
+def normalize_features(df):
+    df["Age"] = ageScaler.transform(df[["Age"]])
+    df["Height"] = heightScaler.transform(df[["Height"]])
+    df["Weight"] = weightScaler.transform(df[["Weight"]])
+    return df
+
+def predict_classification(user_input):
+  prediction = model.predict(user_input)
+  return prediction[0]
+
+def classification_proba(user_input):
+  predictProba = model.predict_proba(user_input)
+  probaDF = pd.Dataframe(predictProba)
+  return probaDF
+
 def main():
   st.title('Diabetes Classification')
   st.info("This app use machine learning to classify diabetes levels.")
@@ -78,6 +108,15 @@ def main():
   st.subheader("Inputted Patient Data")
   st.dataframe(user_df)
 
+  user_df = encode_features(user_df)
+  user_df = normalize_features(user_df)
+
+  prediction = predict_classification(user_df)
+  proba = classification_proba(user_df)
+
+  st.subheader("Prediction Result")
+  st.dataframe(proba)
+  st.write('The predicted output is: ',prediction)
   
 
   # Input data for program
