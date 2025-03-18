@@ -15,7 +15,7 @@ def main():
   st.info("This app use machine learning to classify diabetes levels.")
 
   st.header("Raw Dataset For Training")
-  df = pd.read_csv("ObesityDataSet_raw_and_data_sinthetic.csv")
+  df = pd.read_csv("ObesityDataSet_raw_and_data_sinthetic.csv").head(50)
   st.dataframe(df)
 
   # input data by user
