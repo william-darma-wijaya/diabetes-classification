@@ -10,8 +10,8 @@ def predict_with_model(model, user_input):
   return prediction[0]
 
 def main():
-  st.title('Dermatology Machine Learning')
-  st.info("This app use machine learning")
+  st.title('Diabetes Classification')
+  st.info("This app use machine learning to classify diabetes levels.")
 
   # input data by user
   erythema = st.slider("Erythema", min_value=0, max_value=3, value=2)
