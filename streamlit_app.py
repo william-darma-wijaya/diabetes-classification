@@ -19,12 +19,8 @@ def main():
   st.dataframe(df.head(50))
 
   st.subheader("Height vs Weight With Obesity Level")
-  st.scatter_chart(
-    df,
-    x="Height",
-    y="Weight",
-    color="NObeyesdad"
-  )
+  with st.expander('**Data Visualization**'):
+    st.scatter_chart(data=df, x = 'Height', y = 'Weight', color='NObeyesdad')
 
   # input data by user
   erythema = st.slider("Erythema", min_value=0, max_value=3, value=2)
