@@ -28,7 +28,7 @@ def split_x_y(data, target_column="NObeyesdad"):
 
 def convert_input_to_df(input_data):
   data = [input_data]
-  df = pd.DataFrame(data, columns = ['Gender', 'Age', 'Height', 'Weight', 'family_history_with_overweight', 'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'])
+  df = pd.dataFrame(data, columns = ['Gender', 'Age', 'Height', 'Weight', 'family_history_with_overweight', 'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'])
   return df
 
 def encode_features(df):
@@ -59,7 +59,7 @@ def predict_classification(user_input):
 
 def classification_proba(user_input):
   predictProba = model.predict_proba(user_input)
-  probaDF = pd.Dataframe(predictProba)
+  probaDF = pd.DataFrame(predictProba)
   return probaDF
 
 def main():
