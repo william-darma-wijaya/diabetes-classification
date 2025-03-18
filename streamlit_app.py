@@ -25,10 +25,10 @@ def main():
   with st.expander("**Raw Data**"):
     st.dataframe(df.head(50))
 
-  with st.expander("**Input Data**")
+  with st.expander("**Input Data**"):
     st.dataframe(x.head(50))
 
-  with st.expander("**Output Data**")
+  with st.expander("**Output Data**"):
     st.dataframe(y.head(50))
 
   st.subheader("Height vs Weight With Obesity Level")
