@@ -32,25 +32,26 @@ def convert_input_to_df(input_data):
   return df
 
 def encode_features(df):
-    df["Gender"] = genderEncoder.transform(df[["Gender"]])
-    df["family_history_with_overweight"] = familyHistoryEncoder.transform(df[["family_history_with_overweight"]])
-    df["FAVC"] = favcEncoder.transform(df[["FAVC"]])
-    df["CAEC"] = caecEncoder.transform(df[["CAEC"]])
-    df["SMOKE"] = smokeEncoder.transform(df[["SMOKE"]])
-    df["SCC"] = sccEncoder.transform(df[["SCC"]])
-    df["CALC"] = calcEncoder.transform(df[["CALC"]])
+  df["Gender"] = genderEncoder.transform(df[["Gender"]])
+  df["family_history_with_overweight"] = familyHistoryEncoder.transform(df[["family_history_with_overweight"]])
+  df["FAVC"] = favcEncoder.transform(df[["FAVC"]])
+  df["CAEC"] = caecEncoder.transform(df[["CAEC"]])
+  df["SMOKE"] = smokeEncoder.transform(df[["SMOKE"]])
+  df["SCC"] = sccEncoder.transform(df[["SCC"]])
+  df["CALC"] = calcEncoder.transform(df[["CALC"]])
 
-    # One-hot encode MTRANS
-    encoded_array = mtransEncoder.transform(df[["MTRANS"]])
-    encoded_df = pd.DataFrame(encoded_array, columns=mtransEncoder.get_feature_names_out(["MTRANS"]))
-    df = pd.concat([df, encoded_df], axis=1)
-    df.drop(columns=["MTRANS"], inplace=True)
+  # One-hot encode MTRANS
+  encoded_array = mtransEncoder.transform(df[["MTRANS"]])
+  encoded_df = pd.DataFrame(encoded_array, columns=mtransEncoder.get_feature_names_out(["MTRANS"]))
+  df = pd.concat([df, encoded_df], axis=1)
+  df.drop(columns=["MTRANS"], inplace=True)
+  return df    
 
 def normalize_features(df):
-    df["Age"] = ageScaler.transform(df[["Age"]])
-    df["Height"] = heightScaler.transform(df[["Height"]])
-    df["Weight"] = weightScaler.transform(df[["Weight"]])
-    return df
+  df["Age"] = ageScaler.transform(df[["Age"]])
+  df["Height"] = heightScaler.transform(df[["Height"]])
+  df["Weight"] = weightScaler.transform(df[["Weight"]])
+  return df
 
 def predict_classification(user_input):
   prediction = model.predict(user_input)
