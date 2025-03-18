@@ -2,18 +2,34 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-def load_model(filename):
-  model = joblib.load(filename)
-  return model
+# Load model
+model = joblib.load("savedPickle/model.pkl")
 
-def predict_with_model(model, user_input):
-  prediction = model.predict([user_input])
-  return prediction[0]
+# Load encoder
+genderEncoder = joblib.load("savedPickle/genderEncoder.pkl")
+familyHistoryEncoder = joblib.load("savedPickle/familyHistoryEncoder.pkl")
+favcEncoder = joblib.load("savedPickle/favcEncoder.pkl")
+caecEncoder = joblib.load("savedPickle/caecEncoder.pkl")
+smokeEncoder = joblib.load("savedPickle/smokeEncoder.pkl")
+sccEncoder = joblib.load("savedPickle/sccEncoder.pkl")
+calcEncoder = joblib.load("savedPickle/calcEncoder.pkl")
+mtransEncoder = joblib.load("savedPickle/mtransEncoder.pkl")
+targetEncoder = joblib.load("savedPickle/targetEncoder.pkl")
+
+# Load scalers
+ageScaler = joblib.load("savedPickle/ageScaler.pkl")
+heightScaler = joblib.load("savedPickle/heightScaler.pkl")
+weightScaler = joblib.load("savedPickle/weightScaler.pkl")
 
 def split_x_y(data, target_column="NObeyesdad"):
   output_df = data[target_column]
   input_df = data.drop(target_column, axis=1)
   return input_df, output_df
+
+def convert_input_to_df(input_data):
+  data = [input_data]
+  df = pd.DataFrame(data, columns = ['Gender', 'Age', 'Height', 'Weight', 'family_history_with_overweight', 'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'])
+  return df
 
 def main():
   st.title('Diabetes Classification')
@@ -36,75 +52,33 @@ def main():
     st.scatter_chart(data=df, x = 'Height', y = 'Weight', color='NObeyesdad')
 
   # input data by user
-  erythema = st.slider("Erythema", min_value=0, max_value=3, value=2)
+  st.subheader("Input Patient Data")
+  Age = st.slider('Age', min_value = 10, max_value = 65, value = 25)
+  Height = st.slider('Height', min_value = 1.45, max_value = 2.00, value = 1.75)
+  Weight = st.slider('Weight', min_value = 30, max_value = 180, value = 70)
+  FCVC = st.slider('FCVC', min_value = 1, max_value = 3, value = 2)
+  NCP = st.slider('NCP', min_value = 1, max_value = 4, value = 3)
+  CH2O = st.slider('CH2O', min_value = 1, max_value = 3, value = 2)
+  FAF = st.slider('FAF', min_value = 0, max_value = 3, value = 1)
+  TUE = st.slider('TUE', min_value = 0, max_value = 2, value = 1)
   
-  scaling = st.slider('Scaling', min_value = 0, max_value = 3, value = 2)
+  Gender = st.selectbox('Gender', ('Male', 'Female'))
+  family_history_with_overweight = st.selectbox('Family history with overweight', ('yes', 'no'))
+  FAVC = st.selectbox('FAVC', ('yes', 'no'))
+  CAEC = st.selectbox('CAEC', ('Sometimes', 'Frequently', 'Always', 'no'))
+  SMOKE = st.selectbox('SMOKE', ('yes', 'no'))
+  SCC = st.selectbox('SCC', ('yes', 'no'))
+  CALC = st.selectbox('CALC', ('Sometimes', 'no', 'Frequently', 'Always'))
+  MTRANS = st.selectbox('MTRANS', ('Public_Transportation', 'Automobile', 'Walking', 'Motorbike', 'Bike'))
 
-  definite_borders = st.slider('Definite Borders', min_value = 0, max_value = 3, value = 2)
+  input_data = [Gender, Age, Height, Weight, family_history_with_overweight, FAVC, FCVC, NCP, CAEC, SMOKE, CH2O, SCC, FAF, TUE, CALC, MTRANS]
 
-  itching = st.slider('Itching', min_value = 0, max_value = 3, value = 0)
+  user_df = convert_input_to_df(input_data)
 
-  koebner_phenomenon = st.slider('koebner_phenomenon', min_value = 0, max_value = 3, value = 0)
+  st.subheader("Inputted Patient Data")
+  st.dataframe(user_df)
 
-  polygonal_papules = st.slider('Polygonal Papules', min_value = 0, max_value = 3, value = 0)
-
-  follicular_papules = st.slider('Follicular Papules', min_value = 0, max_value = 3, value = 0)
-
-  oral_mucosal_involvement = st.slider('Oral Mucosal Involvement', min_value = 0, max_value = 3, value = 0)
-
-  knee_and_elbow_involvement = st.slider('Knee and Elbow Involvement', min_value = 0, max_value = 3, value = 0)
-
-  scalp_involvement = st.slider('Scalp Involvement', min_value = 0, max_value = 3, value = 0)
-
-  family_history = st.slider('Family History', min_value = 0, max_value = 1, value = 0)
-
-  melanin_incontinence = st.slider('Melanin Incontinence', min_value = 0, max_value = 3, value = 0)
-
-  eosinophils_infiltrate = st.slider('Eosinophils Infiltrate', min_value = 0, max_value = 2, value = 0)
-
-  PNL_infiltrate = st.slider('PNL Infiltrate', min_value = 0, max_value = 3, value = 0)
-
-  fibrosis_papillary_dermis = st.slider('Fibrosis Papillary Dermis', min_value = 0, max_value = 3, value = 0)
-
-  exocytosis = st.slider('Exocytosis', min_value = 0, max_value = 3, value = 2)
-
-  acanthosis = st.slider('Acanthosis', min_value = 0, max_value = 3, value = 2)
-
-  hyperkeratosis = st.slider('Hyperkeratosis', min_value = 0, max_value = 3, value = 0)
-
-  parakeratosis = st.slider('Parakeratosis', min_value = 0, max_value = 3, value = 2)
-
-  clubbing_rete_ridges = st.slider('Clubbing Rete Ridges', min_value = 0, max_value = 3, value = 0)
-
-  elongation_rete_ridges = st.slider('Elongation Rete Ridges', min_value = 0, max_value = 3, value = 0)
-
-  thinning_suprapapillary_epidermis = st.slider('Thinning Suprapapillary Epidermis', min_value = 0, max_value = 3, value = 0)
-
-  spongiform_pustule = st.slider('Spongiform Pustule', min_value = 0, max_value = 3, value = 0)
-
-  munro_microabcess = st.slider('Munro Microabcess', min_value = 0, max_value = 3, value = 0)
-
-  focal_hypergranulosis = st.slider('Focal Hypergranulosis', min_value = 0, max_value = 3, value = 0)
-
-  disappearance_granular_layer = st.slider('disappearance_granular_layer', min_value = 0, max_value = 3, value = 0)
-
-  vacuolisation_damage_basal_layer = st.slider('vacuolisation damage basal layer', min_value = 0, max_value = 3, value = 0)
-
-  spongiosis = st.slider('Spongiosis', min_value = 0, max_value = 3, value = 0)
-
-  saw_tooth_appearance_retes = st.slider('saw tooth appearance retes', min_value = 0, max_value = 3, value = 0)
-
-  follicular_horn_plug = st.slider('follicular horn plug', min_value = 0, max_value = 3, value = 0)
-
-  perifollicular_parakeratosis = st.slider('perifollicular parakeratosis', min_value = 0, max_value = 3, value = 0)
-
-  inflammatory_mononuclear_infiltrate = st.slider('inflammatory mononuclear infiltrate', min_value = 0, max_value = 3, value = 2)
-
-  band_like_infiltrate = st.slider('band like infiltrate', min_value = 0, max_value = 3, value = 0)
-
-  age = st.slider('age', min_value = 0, max_value = 75, value = 40)
-
-  gender = st.selectbox("gender", ("male", "female"))
+  
 
   # Input data for program
   user_input = [erythema, scaling, definite_borders, itching, koebner_phenomenon, polygonal_papules, follicular_papules, oral_mucosal_involvement, knee_and_elbow_involvement, scalp_involvement, family_history, melanin_incontinence, eosinophils_infiltrate, PNL_infiltrate, fibrosis_papillary_dermis, exocytosis, acanthosis, hyperkeratosis, parakeratosis, clubbing_rete_ridges, elongation_rete_ridges, thinning_suprapapillary_epidermis, spongiform_pustule, munro_microabcess, focal_hypergranulosis, disappearance_granular_layer, vacuolisation_damage_basal_layer, spongiosis, saw_tooth_appearance_retes, follicular_horn_plug, perifollicular_parakeratosis, inflammatory_mononuclear_infiltrate, band_like_infiltrate, age]
