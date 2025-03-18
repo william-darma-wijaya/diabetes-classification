@@ -10,13 +10,26 @@ def predict_with_model(model, user_input):
   prediction = model.predict([user_input])
   return prediction[0]
 
+def split_x_y(data, target_column="NObeyesdad"):
+  output_df = data[target_column]
+  input_df = data.drop(target_column, axis=1)
+  return input_df, output_df
+
 def main():
   st.title('Diabetes Classification')
   st.info("This app use machine learning to classify diabetes levels.")
 
-  st.subheader("Raw Dataset For Training")
+  st.subheader("Dataset")
   df = pd.read_csv("ObesityDataSet_raw_and_data_sinthetic.csv")
-  st.dataframe(df.head(50))
+  x, y = split_x_y(df)
+  with st.expander("**Raw Data**"):
+    st.dataframe(df.head(50))
+
+  with st.expander("**Input Data**")
+    st.dataframe(x.head(50))
+
+  with st.expander("**Output Data**")
+    st.dataframe(y.head(50))
 
   st.subheader("Height vs Weight With Obesity Level")
   with st.expander('**Data Visualization**'):
