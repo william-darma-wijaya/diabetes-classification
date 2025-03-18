@@ -1,9 +1,5 @@
-# 📦 Streamlit App Starter Kit 
-```
-⬆️ (Replace above with your app's name)
-```
-
-Description of the app ...
+# Diabetes Classification With Machine Learning
+This app can classify the diabetes level of a patient.
 
 ## Demo App
 
