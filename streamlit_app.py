@@ -14,9 +14,12 @@ def main():
   st.title('Diabetes Classification')
   st.info("This app use machine learning to classify diabetes levels.")
 
-  st.header("Raw Dataset For Training")
-  df = pd.read_csv("ObesityDataSet_raw_and_data_sinthetic.csv").head(50)
-  st.dataframe(df)
+  st.subheader("Raw Dataset For Training")
+  df = pd.read_csv("ObesityDataSet_raw_and_data_sinthetic.csv")
+  st.dataframe(df.head(50))
+
+  st.subheader("Height vs Weight With Obesity Level")
+  
 
   # input data by user
   erythema = st.slider("Erythema", min_value=0, max_value=3, value=2)
