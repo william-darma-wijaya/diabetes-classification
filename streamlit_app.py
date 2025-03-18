@@ -55,7 +55,9 @@ def normalize_features(df):
 
 def predict_classification(user_input):
   prediction = model.predict(user_input)
-  return prediction[0]
+  decoded_prediction = targetEncoder.inverse_transform([[prediction[0]]])
+  
+  return decoded_prediction[0][0]
 
 def classification_proba(user_input):
   predictProba = model.predict_proba(user_input)
@@ -117,7 +119,7 @@ def main():
 
   st.subheader("Prediction Result")
   st.dataframe(proba)
-  st.write('The predicted output is: ',targetEncoder.inverse_transform(prediction))
+  st.write('The predicted output is: ', prediction)
   
 
 if __name__ == "__main__":
