@@ -13,6 +13,8 @@ def main():
   st.title('Diabetes Classification')
   st.info("This app use machine learning to classify diabetes levels.")
 
+  st.header("Raw Dataset For Training")
+
   # input data by user
   erythema = st.slider("Erythema", min_value=0, max_value=3, value=2)
   
