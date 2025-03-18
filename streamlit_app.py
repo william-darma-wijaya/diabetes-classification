@@ -61,7 +61,11 @@ def predict_classification(user_input):
 
 def classification_proba(user_input):
   predictProba = model.predict_proba(user_input)
-  probaDF = pd.DataFrame(predictProba)
+  column_names = [
+        "Insufficient_Weight", "Normal_Weight", "Overweight_Level_I", 
+        "Overweight_Level_II", "Obesity_Type_I", "Obesity_Type_II", "Obesity_Type_III"
+  ]
+  probaDF = pd.DataFrame(predictProba, columns=column_names)
   return probaDF
 
 def main():
